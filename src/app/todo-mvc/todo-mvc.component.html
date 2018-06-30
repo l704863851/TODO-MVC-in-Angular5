@@ -1,0 +1,36 @@
+<section class="todoapp">
+    <header class="header">
+        <h1>todos</h1>
+        <input [(ngModel)]="newTodo" (keyup.enter)="addTodo($event)" class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?"/>
+    </header>
+    <section [style.display]="todos.length > 0 ? 'block' : 'none'" class="main">
+        <input [(ngModel)]="allDone" type="checkbox" class="toggle-all">
+        <ul class="todo-list">
+            <li *ngFor="let todo of filteredTodos" [class.completed]="todo.completed" [class.editing]="todo === editedTodo" class="todo">
+                <div class="view">
+                    <input [(ngModel)]="todo.completed" type="checkbox" class="toggle">
+                    <label (dblclick)="editTodo(todo)">{{todo.title}}</label>
+                    <button (click)="removeTodo(todo)" class="destroy"></button>
+                </div>
+                <input [appInputfocus]="todo == editedTodo" [(ngModel)]="todo.title" (blur)="doneEdit(todo)" (keyup.enter)="doneEdit(todo)" (keyup.esc)="cancelEdit(todo)" type="text" class="edit">
+            </li>
+        </ul>
+    </section>
+    <footer class="footer" [style.display]="todos.length > 0 ? 'block' : 'none'">
+        <span class="todo-count">
+            <strong>{{remaining}}</strong> {{remaining | pluralize}} left
+        </span>
+        <ul class="filters">
+            <li>
+                <a [class.selected]="visibility == 'all'" (click)="visibility = 'all'" href="javascript:void(0);" class="selected">All</a>
+            </li>
+            <li>
+                <a [class.selected]="visibility == 'active'" (click)="visibility = 'active'" href="javascript:void(0);" class="">Active</a>
+            </li>
+            <li>
+                <a [class.selected]="visibility == 'completed'" (click)="visibility = 'completed'" href="javascript:void(0);" class="">Completed</a>
+            </li>
+        </ul>    
+        <button class="clear-completed" (click)="removeCompleted()" [style.display]="todos.length > remaining ? 'block' : 'none'">Clear completed</button>
+    </footer>
+</section>
